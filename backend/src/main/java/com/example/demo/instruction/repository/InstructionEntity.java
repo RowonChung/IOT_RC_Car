@@ -37,7 +37,6 @@ public class InstructionEntity {
 
     @ManyToOne
     @JoinColumn(name = "car_id")
-    @JsonIgnore // get 요청시 무한참조 현상 발생해서 추가함 TODO: DTO 클래스 처리하는거 생각(이 방법이 더 좋을거 같음)
     private CarEntity car;
 
     @Column(nullable = false, length = 30)
