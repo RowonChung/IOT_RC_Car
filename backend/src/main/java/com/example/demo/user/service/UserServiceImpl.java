@@ -27,21 +27,28 @@ public class UserServiceImpl implements UserService{
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @Override
-    public UserEntity getUserBy(Long id) {
-        return null;
-    }
 
     @Override
     public UserEntity createUser(CreateUser.CreateUserRequest createUserRequest) {
-        return null;
+
+        if(userRepository.existsByEmail(createUserRequest.getEmail())){
+            throw new RuntimeException("이미 가입된 이메일입니다.");
+        }
+
+        UserEntity userEntity = UserEntity.builder()
+                .email(createUserRequest.getEmail())
+                .username(createUserRequest.getUsername())
+                .password(createUserRequest.getPassword())
+                .build();
+        userRepository.save(userEntity);
+
+        return userEntity;
     }
 
     @Override
     public JwtToken signIn(String username, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println("#@!#!@#!@#!@#!@#!@#");
         System.out.println(authentication);
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
         System.out.println(jwtToken);
