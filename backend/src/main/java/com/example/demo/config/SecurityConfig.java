@@ -37,9 +37,6 @@ public class SecurityConfig {
 
         return httpSecurity.build();
 
-
-        return httpSecurity.build();
-
     }
 
     @Bean

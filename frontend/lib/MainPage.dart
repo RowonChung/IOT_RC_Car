@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
+import 'ControlPage.dart';
+import 'LocationPage.dart';
+import 'AboutPage.dart';
+import 'SignInPage.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+void main() async {
+  final storage = FlutterSecureStorage();
+  var isLoggedInString = await storage.read(key: 'isLogin');
+  bool isLoggedIn = isLoggedInString == 'true';
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
+  final bool isLoggedIn;
+
+  const MyApp({required this.isLoggedIn});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      home: isLoggedIn ? MyHomePage() : SignInPage(),
     );
   }
 }
+
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -44,18 +60,22 @@ class MyHomePage extends StatelessWidget {
                     Spacer(),
                     Center( // Center the Container with Icon
                       child: Container( // Wrap Icon in Container
-                        width: 50.0,
-                        height: 50.0,
-
+                        width: 80.0,
+                        height: 80.0,
                         decoration: BoxDecoration( // Add BoxDecoration
                           color: Color.fromRGBO(47, 47, 47,1), // Set background color
                           borderRadius: BorderRadius.circular(50.0), // Set circular border
                         ),
-                        child: Align( // Align the Icon within the Container
-                          alignment: Alignment.center,
-                          child: Icon(
+                        child: IconButton( // Align the Icon within the Container
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AboutPage()), // Replace with your target page class
+                            );
+                          },
+                          icon: Icon(
                             Icons.person,
-                            size: 50.0,
+                            size: 60.0,
                             color: Color.fromRGBO(89, 89, 89,1 ),
                           ),
                         ),
@@ -108,7 +128,12 @@ class MyHomePage extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ControlPage()),
+                        );
+                      },
                       child: Row(
                         children: <Widget>[
                           RichText(
@@ -183,7 +208,12 @@ class MyHomePage extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LocationPage()),
+                        );
+                      },
                       child: Row(
                         children: <Widget>[
                           RichText(
@@ -191,7 +221,7 @@ class MyHomePage extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text: '위치 \n',
-                                  style: TextStyle(fontSize: 20.0,  fontWeight: FontWeight.bold,color: Color.fromRGBO(240, 240, 240, 1)),
+                                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color.fromRGBO(240, 240, 240, 1)),
                                 ),
                                 TextSpan(
                                   text: '대치동 889-45',
@@ -202,7 +232,6 @@ class MyHomePage extends StatelessWidget {
                           ),
                           Spacer(),
                           Icon(Icons.arrow_forward_ios_sharp, color: Color.fromRGBO(137, 137, 137, 1)),
-
                         ],
                       ),
                       style: ElevatedButton.styleFrom(
@@ -336,3 +365,5 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+

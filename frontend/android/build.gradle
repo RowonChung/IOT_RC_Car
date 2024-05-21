@@ -16,3 +16,27 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    def localProperties = new Properties()
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+
+    def flutterGoogleMapKey = localProperties.getProperty('flutter.GoogleMapKey')
+    if (flutterGoogleMapKey == null) {
+        flutterGoogleMapKey = ''
+    }
+
+    android {
+        defaultConfig {
+            // ... (your other defaultConfig settings)
+            resValue "string", "GOOGLE_MAP_KEY", flutterGoogleMapKey
+        }
+    }
+} else {
+    // Handle the case where local.properties doesn't exist
+    // (e.g., print a warning message)
+    println "WARNING: local.properties file not found. Please create it and add your Google Maps API key with the property 'flutter.GoogleMapKey'."
+}
