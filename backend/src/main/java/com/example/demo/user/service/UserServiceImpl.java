@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService{
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     @Override
     public UserEntity createUser(CreateUser.CreateUserRequest createUserRequest) {
 
